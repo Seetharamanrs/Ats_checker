@@ -12,8 +12,10 @@ Built a local-first ATS (Applicant Tracking System) screening tool using Streaml
 - Built-in file size validation (2 MB max) for secure, lightweight uploads
 - Clean and HR-friendly UI for non-technical users
 
-
-
+Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
 
 
