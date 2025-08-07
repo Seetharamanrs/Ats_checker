@@ -48,17 +48,32 @@ if resume_text and jd_text:
     ])
 
 if st.button("Check the Score"):
-    llm = Ollama(model="mistral")
+   
     output_parser = StrOutputParser()
-    chain = prompt | llm | output_parser
+    chain = prompt | output_parser
+    
+    mistral_llm = Ollama(model="mistral")
+    mistral_inputs = {"resume": resume_text, "jd": jd_text}
+    mistral_chain=prompt|mistral_llm|output_parser
+    mistral_result = mistral_chain.invoke(mistral_inputs)
 
-    inputs = {"resume": resume_text, "jd": jd_text}
-    result = chain.invoke(inputs)
+    mistral_match_score = mistral_result.split("Match Score: ")[1].split("%")[0]
+    mistral_missing_skills = mistral_result.split("Missing Skills: ")[1].strip()
+    
+    llama_llm = Ollama(model="mistral")
+    llama_input = {"resume": resume_text, "jd": jd_text}
+    llama_chain=prompt|llama_llm|output_parser
+    llama_result = llama_chain.invoke(llama_input)
 
-    # Extracting and formatting results
-    match_score = result.split("Match Score: ")[1].split("%")[0]
-    missing_skills = result.split("Missing Skills: ")[1].strip()
-
-    st.markdown("### ATS Screening Result")
-    st.text(f"Match Score: {match_score}%")
-    st.text(f"Missing Skills: {missing_skills}")
+    llama_match_score = llama_result.split("Match Score: ")[1].split("%")[0]
+    llama_missing_skills = llama_result.split("Missing Skills: ")[1].strip()
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("### ATS Screening Result")
+        st.text(f"Match Score: {mistral_match_score}%")
+        st.text(f"Missing Skills: {mistral_missing_skills}")
+    with col1:
+        st.markdown("### ATS Screening Result")
+        st.text(f"Match Score: {llama_match_score}%")
+        st.text(f"Missing Skills: {llama_missing_skills}")
