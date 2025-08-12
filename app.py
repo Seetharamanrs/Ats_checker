@@ -68,7 +68,7 @@ if st.button("Check the Score"):
     llama_match_score = llama_result.split("Match Score: ")[1].split("%")[0]
     llama_missing_skills = llama_result.split("Missing Skills: ")[1].strip()
     
-    col1, col2 = st.columns(2)
+    col1, col2,col3 = st.columns(3)
     with col1:
         st.markdown("### ATS Screening Result")
         st.text(f"Match Score: {mistral_match_score}%")
@@ -77,3 +77,8 @@ if st.button("Check the Score"):
         st.markdown("### ATS Screening Result")
         st.text(f"Match Score: {llama_match_score}%")
         st.text(f"Missing Skills: {llama_missing_skills}")
+    with col3:
+        st.markdown("# Score Average")
+        avg_score = (float(llama_match_score) + float(mistral_match_score)) / 2
+        st.text(f"Match Score: {avg_score}")
+        
